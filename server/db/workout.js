@@ -33,7 +33,7 @@ function validate(field, value) {
       if (!val.isValid()) {
         throw `Field "${field}" is not a valid ISO8601-formatted date`;
       }
-      return val.toDate();
+      return val.format('YYYY-MM-DD');
     case 'bool':
       val = Boolean(value);
       return val;
