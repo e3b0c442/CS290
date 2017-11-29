@@ -45,7 +45,7 @@ function validate(field, value) {
 
 function list() {
     return new Promise((resolve, reject) => {
-        db.query("SELECT * FROM workouts;", (err, rows) => {
+        db.query("SELECT * FROM workouts ORDER BY id DESC;", (err, rows) => {
             if(err) {
                 reject(err);
                 return;

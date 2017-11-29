@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Table } from 'react-bootstrap';
-import './WorkoutTable.css';
+import WorkoutRow from './WorkoutRow';
+import AddWorkoutRow from './AddWorkoutRow';
 
 class WorkoutTable extends Component {
 
@@ -9,18 +10,24 @@ class WorkoutTable extends Component {
       <Table>
         <thead>
           <tr>
-            <th>Name</th><th>Reps</th><th>Weight</th><th>Date</th><th>Units</th>
+            <th className="col-xs-2"></th>
+            <th className="col-xs-3">Name</th>
+            <th className="col-xs-2">Date</th>
+            <th className="col-xs-2">Reps</th>
+            <th className="col-xs-2">Weight</th>
+            <th className="col-xs-1">Units</th>
           </tr>
+        </thead>
+        <tbody>
+          <AddWorkoutRow update={this.props.update} alert={this.props.alert}/>
           {
-            this.props.workouts.map((v, i) => {
+            this.props.workouts.map((v) => {
               return(
-                <tr key={v.id}>
-                  <td>{v.name}</td><td>{v.reps}</td><td>{v.weight}</td><td>{v.date}</td><td>{v.units}</td>
-                </tr>
+                <WorkoutRow workout={v} update={this.props.update} alert={this.props.alert}/>
               );
             })
           }
-        </thead>
+        </tbody>
       </Table>
     );
   }

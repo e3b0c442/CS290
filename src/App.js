@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { PageHeader, Panel } from 'react-bootstrap';
+import ReactDOM from 'react-dom';
+import { Alert, PageHeader, Panel } from 'react-bootstrap';
 import './App.css';
 import WorkoutTable from './WorkoutTable';
-import AddWorkout from './AddWorkout';
 
 class App extends Component {
 
@@ -10,7 +10,11 @@ class App extends Component {
     super(props);
 
     this.state = {
-      workouts: []
+      loading: true,
+      workouts: [],
+      alert: {
+        show: false
+      }
     };
   }
 
@@ -18,15 +22,45 @@ class App extends Component {
     this.fetchWorkouts();
   }
 
+  showAlert(style, text, timeout) {
+    this.setState({
+      alert: {
+        show: true,
+        text: text,
+        style: style,
+        timeout: timeout === undefined ? undefined : setTimeout(() => {this.hideAlert()}, timeout)
+      }
+    });
+  }
+
+  hideAlert() {
+    if(this.state.alert.timeout !== undefined) {
+      clearTimeout(this.state.alert.timeout);
+    }
+    this.setState({
+      alert: {
+        show: false
+      }
+    });
+  }
+
   fetchWorkouts() {
     fetch('http://localhost:3000/workout').then((res) => {
+      this.setState({
+        loading: false
+      });
       if(res.status >= 200 && res.status < 300) {
-          return res.json();
+        return res.json();
       }
+      const error = new Error(res.statusText)
+      error.response = res
+      throw error
     }).then((json) => {
-        this.setState({workouts: json});
+        this.setState({
+          workouts: json
+        });
     }).catch((ex) => {
-        console.log(ex);
+      this.showAlert('danger', `Error loading workout data: ${ex}`);
     });
   }
 
@@ -38,15 +72,29 @@ class App extends Component {
     return (
       <div className="App container">
         <PageHeader>Workout tracker</PageHeader>
-        <div class="row">
-          <div class="col-xs-6 col-xs-offset-3">
-            <Panel header={<h3>Add workout</h3>}>
-              <AddWorkout added={() => {this.rowAdded()}}/>
-            </Panel>
-          </div>
-        </div>
-        <h3>Previous workouts</h3>
-        <WorkoutTable workouts={this.state.workouts}/>
+        {
+          this.state.alert.show && (
+            <Alert bsStyle={this.state.alert.style} onDismiss={() => {this.hideAlert()}}>
+              {this.state.alert.text}
+            </Alert>
+          )
+        }
+        {
+          this.state.loading ? (
+            <div>
+              <h2>
+                <i className="fa fa-spinner fa-pulse fa-lg fa-fw"></i>
+                Loading...
+              </h2>
+            </div>
+          ) : (
+            <WorkoutTable 
+            alert={(s, t, o) => this.showAlert(s, t, o)}
+            update={() => {this.fetchWorkouts()}} 
+            workouts={this.state.workouts}
+          />
+          )
+        }
       </div>
     );
   }

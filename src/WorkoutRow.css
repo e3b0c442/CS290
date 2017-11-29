@@ -1,0 +1,7 @@
+.WorkoutRow td .form-group {
+  margin-bottom: 0;
+}
+
+.WorkoutRow > td {
+  vertical-align: middle !important;
+}
