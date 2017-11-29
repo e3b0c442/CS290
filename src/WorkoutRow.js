@@ -36,7 +36,7 @@ class WorkoutRow extends Component {
             valid: 'success'
           },
           date: {
-            value: moment(props.workout.date).format('YYYY-MM-DD'),
+            value: moment.utc(props.workout.date).format('YYYY-MM-DD'),
             valid: 'success'
           },
           lbs: {
@@ -75,7 +75,7 @@ class WorkoutRow extends Component {
               valid: 'success'
             },
             date: {
-              value: moment(props.workout.date).format('YYYY-MM-DD'),
+              value: moment.utc(props.workout.date).format('YYYY-MM-DD'),
               valid: 'success'
             },
             lbs: {
@@ -127,10 +127,9 @@ class WorkoutRow extends Component {
     postJSON.name = this.state.editor.fields.name.value;
     postJSON.reps = parseInt(this.state.editor.fields.reps.value, 10);
     postJSON.weight = parseInt(this.state.editor.fields.weight.value, 10);
-    postJSON.date = moment(this.state.editor.fields.date.value, [
-      moment.ISO_8601,
-      'MM/DD/YYYY'
-    ]).toDate();
+    postJSON.date = moment
+      .utc(this.state.editor.fields.date.value, [moment.ISO_8601, 'MM/DD/YYYY'])
+      .toDate();
     postJSON.lbs = this.state.editor.fields.lbs.value === '1' ? true : false;
 
     fetch(`/workout/${this.state.workout.id}`, {
@@ -328,7 +327,7 @@ class WorkoutRow extends Component {
           </ButtonGroup>
         </td>
         <td>{this.state.workout.name}</td>
-        <td>{moment(this.state.workout.date).format('L')}</td>
+        <td>{moment.utc(this.state.workout.date).format('L')}</td>
         <td>{this.state.workout.reps}</td>
         <td>{this.state.workout.weight}</td>
         <td>{this.state.workout.lbs ? 'lbs' : 'kgs'}</td>

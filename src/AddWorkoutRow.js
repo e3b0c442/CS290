@@ -74,10 +74,9 @@ class AddWorkout extends Component {
     postJSON.name = this.state.fields.name.value;
     postJSON.reps = parseInt(this.state.fields.reps.value, 10);
     postJSON.weight = parseInt(this.state.fields.weight.value, 10);
-    postJSON.date = moment(this.state.fields.date.value, [
-      moment.ISO_8601,
-      'MM/DD/YYYY'
-    ]).toDate();
+    postJSON.date = moment
+      .utc(this.state.fields.date.value, [moment.ISO_8601, 'MM/DD/YYYY'])
+      .toDate();
     postJSON.lbs = this.state.fields.lbs.value === '1' ? true : false;
 
     fetch('/workout', {
