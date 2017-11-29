@@ -45,7 +45,7 @@ class App extends Component {
   }
 
   fetchWorkouts() {
-    fetch('http://localhost:3000/workout').then((res) => {
+    fetch('/workout').then((res) => {
       this.setState({
         loading: false
       });
