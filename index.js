@@ -1,3 +1,3 @@
 const app = require('./server/app.js');
 
-app.listen(3000);
+app.listen(process.argv[2]);
