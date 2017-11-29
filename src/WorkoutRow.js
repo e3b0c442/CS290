@@ -32,7 +32,7 @@ class WorkoutRow extends Component {
             valid: 'success'
           },
           lbs: {
-            value: props.workout.lbs ? 'lbs' : 'kgs',
+            value: props.workout.lbs,
             valid: 'success'
           }
         },
